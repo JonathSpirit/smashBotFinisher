@@ -2,9 +2,21 @@
 
 {% block content %}
 <h1 class="title">
-  Flask Login Example
+    Smash bot finisher
 </h1>
 <h2 class="subtitle">
-  Easy authentication and authorization in Flask.
+    Un challenge sur le jeu Super Smash Bros Ultimate où l'objectif est d'éradiquer tous les champions (IA) et qui comporte les règles suivantes :
 </h2>
+<ul>
+    <li>- Choisir un seul personnage pour tout le challenge</li>
+    <li>- Choisir le stage "Champ de Bataille" en mode DF pour tout le challenge</li>
+    <li>- Le temps doit être de 6min</li>
+    <li>- Le nombre de vie doit être 3</li>
+    <li>- Le niveau de l'IA doit être 9</li>
+    <li>- Le personnage de l'IA doit être pris dans l'ordre donné par le site</li>
+    <li>- Impossible de prendre de l'avance sur l'ordre donné</li>
+    <li>- Les défaites doivent être annoncé sur le site</li>
+    <li>- Les victoires doivent être annoncé sur le site, accompagné d'un screenshot de l'écran de victoire</li>
+</ul>
+<img src="{{ url_for('static', filename='image/stage/battlefield.png') }}">
 {% endblock %}

@@ -5,19 +5,23 @@
   Welcome, {{ name }}!
 </h1>
 
-<table>
-        {% for key in characters %}
-            {% if loop.index % 13 == 0 %}
-            <tr>
-            {% endif %}
+<div>
+    {% for key in charactersData %}
+        {% if loop.index % 13 == 1 %}
+        <div class="columns">
+        {% endif %}
 
-            <td>
-                <img src="{{ url_for('static', filename=characters[key].profile) }}" </img>
-            </td>
+        <div class="column" style="min-width: 10px">
+            <img class="cropped-profile"
+                 {% if key|string in characters and characters[key|string].killed %}
+                    style="filter: grayscale(100%)"
+                 {% endif %}
+                 src="{{ url_for('static', filename=charactersData[key].profile) }}">
+        </div>
 
-            {% if loop.index % 13 == 0 %}
-            </tr>
-            {% endif %}
-        {% endfor %}
-</table>
+        {% if loop.index == ((loop.index/13)|int * 13) %}
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
 {% endblock %}

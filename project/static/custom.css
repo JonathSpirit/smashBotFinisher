@@ -1,0 +1,6 @@
+.cropped-profile {
+    width: 100px;
+    height: 40px;
+    max-width: none;
+    object-fit: cover;
+}

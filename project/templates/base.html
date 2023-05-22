@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Smash bot finisher</title>
     <link rel="stylesheet" href="{{ url_for("static", filename="bulma.css") }}" />
+    <link rel="stylesheet" href="{{ url_for("static", filename="custom.css") }}" />
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 
@@ -46,7 +47,7 @@
         </div>
 
         <div class="hero-body">
-            <div class="container has-text-centered">
+            <div class="container is-fluid has-text-centered">
                {% block content %}
                {% endblock %}
             </div>

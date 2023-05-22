@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template
 from flask_login import login_required, current_user
-from .characters import characters
-from . import db
+from . import db, characters
 
 main = Blueprint('main', __name__)
 
@@ -14,4 +13,4 @@ def index():
 @main.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', name=current_user.name, characters=characters)
+    return render_template('profile.html', name=current_user.name, charactersData=characters, characters=current_user.characters)

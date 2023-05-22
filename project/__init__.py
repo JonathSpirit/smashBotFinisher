@@ -7,14 +7,15 @@ from .characters import characters_init
 
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
+characters = characters_init()
 
 ''' Create the database in the python interpreter:
 
-    from project import db, create_app, models
-    app = create_app()
+from project import db, create_app, models
+app = create_app()
 
-    with app.app_context():
-        db.create_all()
+with app.app_context():
+    db.create_all()
 '''
 
 
@@ -44,9 +45,5 @@ def create_app():
     # blueprint for non-auth parts of app
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
-
-    # Init all Smash characters
-    with app.app_context():
-        characters_init()
 
     return app
