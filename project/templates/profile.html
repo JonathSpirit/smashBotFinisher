@@ -4,4 +4,20 @@
 <h1 class="title">
   Welcome, {{ name }}!
 </h1>
+
+<table>
+        {% for key in characters %}
+            {% if loop.index % 13 == 0 %}
+            <tr>
+            {% endif %}
+
+            <td>
+                <img src="{{ url_for('static', filename=characters[key].profile) }}" </img>
+            </td>
+
+            {% if loop.index % 13 == 0 %}
+            </tr>
+            {% endif %}
+        {% endfor %}
+</table>
 {% endblock %}
