@@ -5,17 +5,88 @@
     Tableau de bord (profile)
 </h1>
 
-<div class="card-image has-text-centered">
-    <img style="width: 40%; height: auto" src="{{ url_for('static', filename=nextCharacter.profile) }}">
+<div class="level" >
+    <div class="box">
+        <img style="object-fit: cover; width: 60%; height: 200px" src="{{ url_for('static', filename=nextCharacter.profile) }}">
+        <label class="label"> Tu doit battre {{ nextCharacter.cleanName }} ! </label>
+    </div>
+    <div class="box">
+        <span>
+            <img style="width: 40%; height: auto" src="{{ url_for('static', filename='image/grave.png') }}">
+            <label class="label"> Mort(s) </label>
+        </span>
+        <label class="label" id='death_counter'> 0 </label>
+
+        <script>
+        function animate(obj, initVal, lastVal, duration) {
+            let startTime = null;
+
+            //get the current timestamp and assign it to the currentTime variable
+            let currentTime = Date.now();
+
+            //pass the current timestamp to the step function
+            const step = (currentTime ) => {
+                //if the start time is null, assign the current time to startTime
+                if (!startTime) {
+                    startTime = currentTime ;
+                }
+
+                //calculate the value to be used in calculating the number to be displayed
+                const progress = Math.min((currentTime - startTime)/ duration, 1);
+
+                //calculate what to be displayed using the value gotten above
+                obj.innerHTML = Math.floor(progress * (lastVal - initVal) + initVal);
+
+                //checking to make sure the counter does not exceed the last value (lastVal)
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    window.cancelAnimationFrame(window.requestAnimationFrame(step));
+                }
+            };
+            //start animating
+            window.requestAnimationFrame(step);
+        }
+
+        let text1 = document.getElementById('death_counter');
+
+        window.onload = () => {
+            {% if nextCharacter.id|string in characters %}
+                animate(text1, 0, {{ characters[nextCharacter.id|string].death }}, 100000);
+            {% endif %}
+        }
+        </script>
+    </div>
 </div>
-<h1 class="subtitle">
-    Tu doit battre {{ nextCharacter.cleanName }} !
-</h1>
 
 <div class="buttons is-centered">
     <button class="button is-success">Victoire</button>
-    <button class="button is-danger">Défaite</button>
+    <button id="defeat_button" class="button is-danger">Défaite</button>
 </div>
+
+<div style="display: none" id="defeat_notif" class="notification is-warning">
+    <button class="delete"></button>
+    Navré de l'apprendre :,( Est-tu sûr de vouloir déclarer une défaite ?
+    <div class="buttons is-centered">
+        <button class="button is-danger">Oui</button>
+    </div>
+    <script>
+        const deleteButton = document.getElementsByClassName('delete').item(0);
+
+        deleteButton.addEventListener('click', function() {
+            div.style.display = 'none';
+        });
+    </script>
+</div>
+
+<script>
+const button = document.getElementById('defeat_button');
+const div = document.getElementById('defeat_notif');
+
+button.addEventListener('click', function() {
+    div.style.display = 'block';
+});
+</script>
 
 <h1 class="subtitle" style="margin-top: 80px">
     Voici ta liste d'IA à battre, {{ name }}. Bonne chance !
@@ -42,4 +113,6 @@
         {% endif %}
     {% endfor %}
 </div>
+
+<a style="display: flex; margin-top: 80px; justify-content: center; align-items: center;" href="https://www.flaticon.com/free-icons/rip" title="rip icons">Rip icons created by Freepik - Flaticon </a>
 {% endblock %}

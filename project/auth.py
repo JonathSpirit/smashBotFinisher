@@ -59,7 +59,8 @@ def signup_post():
         return redirect(url_for('auth.signup'))
 
     # create a new user with the form data. Hash the password so the plaintext version isn't saved.
-    new_user = User(email=email, name=name, password=generate_password_hash(password, method='scrypt'), characters={})
+    characters_json = {"0": {"killed": False, "death": 0}}
+    new_user = User(email=email, name=name, password=generate_password_hash(password, method='scrypt'), characters=characters_json)
 
     # add the new user to the database
     db.session.add(new_user)

@@ -5,6 +5,19 @@ from . import db, characters
 main = Blueprint('main', __name__)
 
 
+def retrieveNextCharacterToBeKilled():
+    next_character = None
+
+    for index_id in range(0, len(characters)):
+        if not str(index_id) in current_user.characters:
+            next_character = characters[index_id]
+            break
+        elif not current_user.characters[str(index_id)]["killed"]:
+            next_character = characters[index_id]
+            break
+    return next_character
+
+
 @main.route('/')
 def index():
     return render_template('index.html')
@@ -13,16 +26,7 @@ def index():
 @main.route('/profile')
 @login_required
 def profile():
-    next_character = None
-
-    # Retrieve the next character to be killed
-    for index_id in range(0, len(characters)):
-        if not str(index_id) in current_user.characters:
-            next_character = characters[index_id]
-            break
-        elif not current_user.characters[str(index_id)]["killed"]:
-            next_character = characters[index_id]
-            break
+    next_character = retrieveNextCharacterToBeKilled()
 
     return render_template('profile.html',
                            name=current_user.name,
