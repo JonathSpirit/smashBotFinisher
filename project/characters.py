@@ -8,6 +8,7 @@ class Characters:
         self.id = character_id
         self.name = character_name
         self.profile = 'image/characterSlides/' + str(character_id) + '-' + character_name + '.png'
+        self.cleanName = character_name.replace('_', " ")
 
 
 def characters_init():

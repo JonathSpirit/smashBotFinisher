@@ -2,8 +2,26 @@
 
 {% block content %}
 <h1 class="title">
-  Welcome, {{ name }}!
+    Tableau de bord (profile)
 </h1>
+
+<div class="card-image has-text-centered">
+    <img style="width: 40%; height: auto" src="{{ url_for('static', filename=nextCharacter.profile) }}">
+</div>
+<h1 class="subtitle">
+    Tu doit battre {{ nextCharacter.cleanName }} !
+</h1>
+
+<div class="buttons is-centered">
+    <button class="button is-success">Victoire</button>
+    <button class="button is-danger">Défaite</button>
+</div>
+
+<h1 class="subtitle" style="margin-top: 80px">
+    Voici ta liste d'IA à battre, {{ name }}. Bonne chance !
+</h1>
+
+<progress class="progress" value="{{ characters|length }}" max="{{ charactersData|length }}"></progress>
 
 <div>
     {% for key in charactersData %}

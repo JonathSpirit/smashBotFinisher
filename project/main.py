@@ -13,4 +13,19 @@ def index():
 @main.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', name=current_user.name, charactersData=characters, characters=current_user.characters)
+    next_character = None
+
+    # Retrieve the next character to be killed
+    for index_id in range(0, len(characters)):
+        if not str(index_id) in current_user.characters:
+            next_character = characters[index_id]
+            break
+        elif not current_user.characters[str(index_id)]["killed"]:
+            next_character = characters[index_id]
+            break
+
+    return render_template('profile.html',
+                           name=current_user.name,
+                           charactersData=characters,
+                           characters=current_user.characters,
+                           nextCharacter=next_character)
