@@ -8,7 +8,7 @@
 <div class="level" >
     <div class="box">
         <img style="object-fit: cover; width: 60%; height: 200px" src="{{ url_for('static', filename=nextCharacter.profile) }}">
-        <label class="label"> Tu doit battre {{ nextCharacter.cleanName }} ! </label>
+        <label class="label"> Tu dois battre {{ nextCharacter.cleanName }} ! </label>
     </div>
     <div class="box">
         <span>
@@ -18,8 +18,9 @@
         <label class="label" id='death_counter'> 0 </label>
 
         <script>
-        function animate(obj, initVal, lastVal, duration) {
+        function animate(obj, initVal, lastVal, interval) {
             let startTime = null;
+            let duration = Math.abs(lastVal-initVal) * interval;
 
             //get the current timestamp and assign it to the currentTime variable
             let currentTime = Date.now();
@@ -52,7 +53,7 @@
 
         window.onload = () => {
             {% if nextCharacter.id|string in characters %}
-                animate(text1, 0, {{ characters[nextCharacter.id|string].death }}, 100000);
+                animate(text1, 0, {{ characters[nextCharacter.id|string].death }}, 200);
             {% endif %}
         }
         </script>
@@ -60,31 +61,92 @@
 </div>
 
 <div class="buttons is-centered">
-    <button class="button is-success">Victoire</button>
+    <button id="victory_button" class="button is-success">Victoire</button>
     <button id="defeat_button" class="button is-danger">Défaite</button>
 </div>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    <div class="notification is-danger">
+        {{ messages[0] }}
+    </div>
+{% endif %}
+{% endwith %}
 
 <div style="display: none" id="defeat_notif" class="notification is-warning">
     <button class="delete"></button>
     Navré de l'apprendre :,( Est-tu sûr de vouloir déclarer une défaite ?
-    <div class="buttons is-centered">
-        <button class="button is-danger">Oui</button>
-    </div>
+    <form method="POST" action="/defeated">
+        <div class="buttons is-centered">
+            <button class="button is-danger">Oui</button>
+        </div>
+    </form>
     <script>
-        const deleteButton = document.getElementsByClassName('delete').item(0);
+        {
+            const deleteButton = document.getElementById('defeat_notif').getElementsByClassName('delete').item(0);
 
-        deleteButton.addEventListener('click', function() {
-            div.style.display = 'none';
-        });
+            deleteButton.addEventListener('click', function() {
+                defeatDiv.style.display = 'none';
+            });
+        }
+    </script>
+</div>
+
+<div style="display: none" id="victory_notif" class="notification is-warning">
+    <button class="delete"></button>
+    Afin de vérifier ta victoire, merci d'upload une photo d'écran de victoire (avec les stats)
+    <form method="POST" action="/victory" enctype="multipart/form-data">
+        <div id="victory-file" class="file is-primary is-centered has-name">
+            <label class="file-label">
+                <input class="file-input" type="file" name="fileupload">
+                <span class="file-cta">
+                    <span class="file-icon">
+                        <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="file-label">
+                        Sélectionnez une image…
+                    </span>
+                </span>
+                <span class="file-name" >
+                    IMAGE(.png/.jpg/.jpeg)
+                </span>
+            </label>
+        </div>
+        <script>
+            const fileInput = document.querySelector('#victory-file input[type=file]');
+            fileInput.onchange = () => {
+                if (fileInput.files.length > 0) {
+                    const fileName = document.querySelector('#victory-file .file-name');
+                    fileName.textContent = fileInput.files[0].name;
+                    document.getElementById('victory-file').parentElement.submit();
+                }
+            }
+        </script>
+    </form>
+    <script>
+        {
+            const deleteButton = document.getElementById('victory_notif').getElementsByClassName('delete').item(0);
+
+            deleteButton.addEventListener('click', function() {
+                victoryDiv.style.display = 'none';
+            });
+        }
     </script>
 </div>
 
 <script>
-const button = document.getElementById('defeat_button');
-const div = document.getElementById('defeat_notif');
+const buttonDefeat = document.getElementById('defeat_button');
+const buttonVictory = document.getElementById('victory_button');
+const defeatDiv = document.getElementById('defeat_notif');
+const victoryDiv = document.getElementById('victory_notif');
 
-button.addEventListener('click', function() {
-    div.style.display = 'block';
+buttonDefeat.addEventListener('click', function() {
+    defeatDiv.style.display = 'block';
+    victoryDiv.style.display = 'none';
+});
+buttonVictory.addEventListener('click', function() {
+    victoryDiv.style.display = 'block';
+    defeatDiv.style.display ='none';
 });
 </script>
 
